@@ -5,6 +5,25 @@ Testcase 1
 Шаги: 1. Зайти на сайт - https://www.avito.ru/avito-care/eco-impact 2. Скролл до экосчётчиков" 3. Вопроизвести автотест для скрина
 ОР: Сохраняется скрин счетчиков
 Статус: PASSED
+import datetime
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("https://www.avito.ru/avito-care/eco-impact")
+driver.maximize_window()
+driver.execute_script("window.scrollTo(0, 700)")
+time.sleep(5)
+counter = driver.find_element(
+    By.XPATH, '//*[@id="app"]/div/div[3]/div/div/div/div/div[3]/div/div[2]'
+)
+
+now_date = datetime.datetime.utcnow().strftime("%Y.%m.%d.%H.%M")
+name_screenshot = "counters" + now_date + ".png"
+driver.save_screenshot(name_screenshot)
+
+driver.close()
 
 Testcase 2
 Скрин счётчиков на странице у нового авторизованного пользователя
@@ -12,6 +31,32 @@ Testcase 2
 Шаги: "1. Зайти на сайт - https://www.avito.ru/avito-care/eco-impact 2. Скролл до экосчётчиков" 3. Воспроизвести автотест для скрина
 ОР: Сохраняется скрин счетчиков
 Статус: SKIPPED (нужен код для тестирования api, т.к. для регистрации нового пользователя необходим свободный номер телефона)
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("https://www.avito.ru/avito-care/eco-impact")
+driver.maximize_window()
+driver.execute_script("window.scrollTo(0, 700)")
+time.sleep(2)
+
+auth = driver.find_element(
+    By.XPATH,
+    '//*[@id="app"]/div/div[3]/div/div/div/div/div[3]/div/div[1]/div[2]/button')
+auth.click()
+time.sleep(2)
+
+login_window = driver.find_element(By.XPATH, '/html/body/div[3]/div/div/div/div/div/div/div/div[1]')
+driver.switch_to.window(login_window)
+time.sleep(5)
+login = driver.find_element(
+    By.XPATH,
+    "/html/body/div[3]/div/div/div/div/div/div/div/div[1]/form/div/div[1]/label/div/div/input",
+).click()
+login.send_keys("89254824792")
+
+driver.close()
 
 Testcase 3
 Скрин счётчиков на странице у авторизованного пользователя, которые совершал действия на сайте
